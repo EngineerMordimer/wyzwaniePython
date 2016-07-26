@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import sys
 import os
-import collections
 
 
 def get_extension(file):
@@ -25,7 +24,7 @@ def get_size(file, path):
 def scan_dir(path, main_data):
     """
     Scan directory for data about files, if search dir, execute recursive this method.
-    Return list of data.
+    Return list of data (extension, sum of size, count) and count of all files.
     """
     for element in os.listdir(path):
         # print("path: " + path + ", element: " + element)
@@ -49,9 +48,7 @@ mainData = {"list": listData, "count_files": 0}
 mainData = scan_dir(localPath, mainData)
 mainData["list"] = sorted(mainData["list"], key=lambda k: k["count"], reverse=True)
 allElements = mainData["count_files"]
-# print(listData)
-#print(allElements)
 print("#####***************%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-for file in mainData["list"]:
-    histogram = '#' * round((50 * (file["count"] / allElements)))
-    print(file["extension"].rjust(5, ' ') + str(file["size"]).rjust(15, ' ') + histogram.rjust(60, ' ') + " " + str(file["count"]))
+for fileType in mainData["list"]:
+    histogram = '#' * round((50 * (fileType["count"] / allElements)))
+    print(fileType["extension"].rjust(5, ' ') + (str(fileType["size"]) + 'B').rjust(15, ' ') + histogram.rjust(60, ' '))
