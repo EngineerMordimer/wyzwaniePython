@@ -3,7 +3,7 @@ import sys
 import os
 
 
-def get_extension(file):
+def get_ext(file):
     """
     Return extension o file (to 5 charts). If extension is longer, last char is *.
     """
@@ -28,16 +28,16 @@ def scan_dir(path, main_data):
     """
     for element in os.listdir(path):
         # print("path: " + path + ", element: " + element)
-        if os.path.isfile(path + "/" + element):
+        new_path = path + "/" + element
+        if os.path.isfile(new_path):
             main_data["count_files"] += 1
-            file = next((file for file in main_data["list"] if file["extension"] == get_extension(element)), None)
+            file = next((file for file in main_data["list"] if file["extension"] == get_ext(element)), None)
             if file:
                 file["count"] += 1
                 file["size"] += get_size(element, path)
             else:
-                main_data["list"].append({"extension": get_extension(element), "count": 1, "size": get_size(element, path)})
+                main_data["list"].append({"extension": get_ext(element), "count": 1, "size": get_size(element, path)})
         else:
-            new_path = path + "/" + element
             main_data = scan_dir(new_path, main_data)
     return main_data
 
@@ -51,7 +51,7 @@ allElements = mainData["count_files"]
 writeFile = ''
 if len(sys.argv) > 2:
     print("Saving file: " + sys.argv[2])
-    writeFile = open(sys.argv[2], 'w+')
+    writeFile = open(sys.argv[2], 'w')
     writeFile.write("#####***************%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n")
 else:
     print("#####***************%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
