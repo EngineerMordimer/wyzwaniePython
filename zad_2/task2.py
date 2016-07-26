@@ -48,7 +48,17 @@ mainData = {"list": listData, "count_files": 0}
 mainData = scan_dir(localPath, mainData)
 mainData["list"] = sorted(mainData["list"], key=lambda k: k["count"], reverse=True)
 allElements = mainData["count_files"]
-print("#####***************%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+writeFile = ''
+if len(sys.argv) > 2:
+    print("Saving file: " + sys.argv[2])
+    writeFile = open(sys.argv[2], 'w+')
+    writeFile.write("#####***************%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n")
+else:
+    print("#####***************%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 for fileType in mainData["list"]:
     histogram = '#' * round((50 * (fileType["count"] / allElements)))
-    print(fileType["extension"].rjust(5, ' ') + (str(fileType["size"]) + 'B').rjust(15, ' ') + histogram.rjust(60, ' '))
+    text = fileType["extension"].rjust(5, ' ') + (str(fileType["size"]) + 'B').rjust(15, ' ') + histogram.rjust(60, ' ')
+    if len(sys.argv) > 2:
+        writeFile.write(text + '\n')
+    else:
+        print(text)
