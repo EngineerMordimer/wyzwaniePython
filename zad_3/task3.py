@@ -211,7 +211,8 @@ def parse(cmd, args):
         elif cmd == "rm":
             return cmd_rm(args[0])
         elif cmd == "help":
-            return eval("help(cmd_" + args[0] + ")" if len(args) > 0 and len(args[0]) > 0 else "help(parse)")
+            my_command = "cmd_" + args[0] if len(args) > 0 and len(args[0]) > 0 else "parse"
+            return eval("help(" + my_command + ")")
         else:
             return "Wrong command!"
     except IndexError:
