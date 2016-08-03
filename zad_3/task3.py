@@ -180,10 +180,22 @@ def cmd_touch(path):
     return None
 
 
+def cmd_mkdir(path):
+    """Create new directory
+
+    Args:
+        path:
+    Returns:
+        None
+    """
+    os.makedirs(path, mode=0o755, exist_ok=True)
+    return None
+
+
 def parse(cmd, args):
     """Execute command with arguments
     Command list:
-        pwd, ls, info, cd, cp, mv, touch, rm
+        pwd, ls, info, cd, cp, mv, touch, mkdir, rm
 
     For help type "help 'command' ", where 'command' is one from list
 
@@ -208,6 +220,8 @@ def parse(cmd, args):
             return cmd_mv(args[0], args[1])
         elif cmd == "touch":
             return cmd_touch(args[0])
+        elif cmd == "mkdir":
+            return cmd_mkdir(args[0])
         elif cmd == "rm":
             return cmd_rm(args[0])
         elif cmd == "help":
