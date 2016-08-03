@@ -41,14 +41,24 @@ def get_type(path):
 
 
 def get_size(path):
-    """Return size of file in path
+    """Return size and number of elements in path and sub-folders in path
 
     Args:
         path: real path
     Returns:
-        Size of file in bytes
+        Return dictionary {"size": total_size, "count": count_files}
     """
-    return os.stat(path).st_size
+    if os.path.isfile(path):
+        return {"size": os.stat(path).st_size, "count": 1}
+    else:
+        total_size = 0
+        count_files = 0
+        for dirpath, dirnames, filenames in os.walk(path):
+            for f in filenames:
+                fp = os.path.join(dirpath, f)
+                total_size += os.path.getsize(fp)
+                count_files += 1
+        return {"size": total_size, "count": count_files}
 
 
 def cmd_ls(path):
@@ -74,8 +84,8 @@ def cmd_ls_exclusive(path):
     view_text += '=' * 47 + '\n'
     for element in os.listdir(path):
         name = element
-        extension = get_ext(element, path)
-        size = get_size(element, path)
+        extension = get_ext('{path}/{file}'.format(path=path, file='element'))
+        size = get_size('{path}/{file}'.format(path=path, file='element'))["size"]
         view_text += '{name:>20} {extension:>10} {size:>15}\n'.format(**vars())
     return view_text
 
@@ -90,7 +100,9 @@ def cmd_info(path):
     """
     view_text = "typ: " + get_type(path) + '\n'
     view_text += "ścieżka: " + path + '\n'
-    view_text += "rozmiar: " + str(get_size(path)) + '\n'
+    view_text += "rozmiar: " + str(get_size(path)["size"]) + 'B\n'
+    if os.path.isdir(path):
+        view_text += "liczba_plikow: " + str(get_size(path)["count"]) + '\n'
     view_text += "ctime: " + str(os.path.getctime(path)) + '\n'
     view_text += "mtime: " + str(os.path.getmtime(path))
     return view_text
