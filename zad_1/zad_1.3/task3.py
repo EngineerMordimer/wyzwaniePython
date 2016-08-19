@@ -234,7 +234,6 @@ def parse(cmd, args):
     except:
         return cmd + ": " + str(sys.exc_info())
 
-localPath = (sys.argv[1] if len(sys.argv) > 1 else os.getcwd())
 print("You are in: " + cmd_pwd())
 print("Type 'help' for usage info.")
 print("Type 'exit' to end program.")
