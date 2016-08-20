@@ -18,9 +18,10 @@ def read_markdown(local_queue, file, local_mode=None):
     """
     if local_mode:
         print(' '*10 + 'Start reading')
-    md = open(file, 'r').read()
+    md_file = open(file, 'r')
+    md = md_file.read()
+    md_file.close()
     local_queue.put(md)
-    local_queue.task_done()
     if local_mode:
         print(' '*10 + 'End reading')
     return
@@ -39,11 +40,11 @@ def translate_md_html(local_queue, new_file, local_mode=None):
     if local_mode:
         print(' '*20 + 'Start translate')
     tmp = local_queue.get()
-    html = markdown.markdown(tmp)
-    local_queue.put(html)
     local_queue.task_done()
-    #write_file = open(new_file, 'w+')
-    #write_file.write(html)
+    html = markdown.markdown(tmp)
+    write_file = open(new_file, 'w+')
+    write_file.write(html)
+    write_file.close()
     if local_mode:
         print(' '*20 + 'End translate')
     return
