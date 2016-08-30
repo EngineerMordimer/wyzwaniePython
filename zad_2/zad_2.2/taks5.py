@@ -88,7 +88,17 @@ if game_mode == "local":
         else:
             curr_char = 'o'
         print('Now playing: ' + curr_char)
-        iterator += play_game(game_map, curr_char)
+        decision = play_game(game_map, curr_char)
+        if decision == 2:
+            sys.exit(1)
+        while decision == -1:
+            decision = play_game(game_map, curr_char)
+        draw_map(shell, game_map)
+        if make_dec(game_map) == 'W':
+            print(winner_text)
+            print("Player: " + curr_char + " WIN !")
+            sys.exit(1)
+        iterator += 1
 elif game_mode == "online":
     socket_srv, socket_clt = set_connection(port_srv, port_clt)
     print("Hello player: " + player)
